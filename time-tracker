@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Time Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #007BFF;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+        }
+
+        #checkInButton {
+            background-color: #4caf50; /* Green */
+            color: white;
+        }
+
+        #checkOutButton {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+
+        #timer {
+            font-size: 60px;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+
+        #date {
+            margin-top: 10px;
+            font-size: 24px;
+        }
+
+        /* Menu styles */
+        nav {
+            width: 100%;
+            background-color: #007BFF;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .about-section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Live Time Tracker</h1>
+        <button id="checkInButton" onclick="checkIn()">Check In</button>
+        <button id="checkOutButton" onclick="checkOut()">Check Out</button>
+        <div id="timer">00:00</div>
+        <div id="date"></div>
+
+        <!-- About Section -->
+        <div class="about-section" id="about">
+            <h2>About This App</h2>
+            <p>This is my testing app. I am a junior developer and security analyst. This app is made by Jay Mali Manubhai.</p>
+        </div>
+    </div>
+
+    <script>
+        let checkInTime = null;
+        let timerInterval = null;
+
+        function updateDate() {
+            const today = new Date();
+            const dateString = today.toLocaleDateString();
+            document.getElementById('date').innerText = `Date: ${dateString}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const currentTime = new Date();
+                const elapsedTime = new Date(currentTime - checkInTime);
+                const minutes = String(elapsedTime.getUTCMinutes()).padStart(2, '0');
+                const seconds = String(elapsedTime.getUTCSeconds()).padStart(2, '0');
+                document.getElementById('timer').innerText = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+
+        function checkIn() {
+           if (!checkInTime) {
+               checkInTime = new Date();
+               startTimer();
+               updateDate();
+               console.log("Checked in at:", checkInTime);
+               alert("Checked in successfully!");
+           } else {
+               alert("Already checked in");
+           }
+       }
+
+       function checkOut() {
+           if (checkInTime) {
+               clearInterval(timerInterval);
+               const checkOutTime = new Date();
+               console.log("Checked out at:", checkOutTime);
+               checkInTime = null; // Reset for next session
+               alert("Checked out successfully!");
+               document.getElementById('timer').innerText = "00:00"; // Reset timer display
+           } else {
+               alert("Not checked in");
+           }
+       }
+
+       // Initialize date on page load
+       window.onload = updateDate;
+
+   </script>
+</body>
+</html>
